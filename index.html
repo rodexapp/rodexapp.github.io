@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#ffffff">
+<title>RODEX</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-family:'Inter',sans-serif}
+body{background:#f0f0f0;color:#1a1a1a;overflow:hidden;height:100vh;width:100vw}
+.phone-frame{width:100%;height:100vh;max-width:430px;margin:0 auto;background:#fff;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.status-bar{display:flex;justify-content:space-between;align-items:center;padding:10px 20px 4px;font-size:14px;font-weight:600;color:#1a1a1a;background:#fff;flex-shrink:0}
+.status-bar .brand{font-size:11px;font-weight:800;color:#22d3ee;letter-spacing:2px}
+.status-bar .icons{display:flex;gap:6px;align-items:center}
+.app-header{padding:8px 20px 14px;background:#fff;z-index:10;flex-shrink:0;border-bottom:1px solid #f0f0f0}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:36px;height:36px;background:#22d3ee;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px}
+.logo h1{font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#1a1a1a}
+.header-actions{display:flex;align-items:center;gap:12px}
+.icon-btn{position:relative;background:none;border:none;color:#1a1a1a;cursor:pointer;padding:4px}
+.badge{position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:#22d3ee;border-radius:50%;font-size:9px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center}
+.avatar{width:36px;height:36px;border-radius:50%;overflow:hidden;border:2px solid #22d3ee}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.search-box{display:flex;align-items:center;background:#f5f5f7;border-radius:14px;padding:10px 14px;gap:10px;color:#8e8e93}
+.search-box input{background:transparent;border:none;outline:none;color:#1a1a1a;font-size:15px;width:100%;font-family:inherit}
+.search-box input::placeholder{color:#8e8e93}
+.content-area{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;scrollbar-width:none;background:#fff;-webkit-overflow-scrolling:touch}
+.content-area::-webkit-scrollbar{display:none}
+.page{display:none;padding:0 20px 100px;animation:slideUp .25s ease}
+.page.active{display:block}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.categories-row{display:flex;gap:12px;overflow-x:auto;padding:12px 0 16px;scrollbar-width:none}
+.categories-row::-webkit-scrollbar{display:none}
+.category-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;cursor:pointer;transition:transform .2s}
+.category-item:active{transform:scale(.95)}
+.cat-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;background:#22d3ee20;color:#22d3ee}
+.category-item.active .cat-icon{background:#22d3ee!important;color:#fff!important;box-shadow:0 4px 15px rgba(34,211,238,.3)}
+.category-item span{font-size:11px;font-weight:500;color:#666}
+.category-item.active span{color:#22d3ee;font-weight:600}
+.hero-banner{position:relative;background:#1a1a1a;border-radius:24px;padding:24px;margin-bottom:24px;overflow:hidden}
+.hero-content{position:relative;z-index:2}
+.hero-tag{display:inline-block;background:#22d3ee;color:#1a1a1a;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:12px;letter-spacing:.5px}
+.hero-content h2{font-size:22px;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.3}
+.hero-content p{font-size:13px;color:#aaa;margin-bottom:16px;line-height:1.4}
+.hero-btn{background:#22d3ee;color:#1a1a1a;border:none;padding:10px 24px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:transform .2s}
+.hero-btn:active{transform:scale(.95)}
+.hero-shapes{position:absolute;top:0;right:0;width:100%;height:100%;pointer-events:none}
+.shape{position:absolute;border-radius:50%;background:#22d3ee;opacity:.08}
+.shape-1{width:120px;height:120px;top:-30px;right:-20px}
+.shape-2{width:80px;height:80px;bottom:20px;right:40px;opacity:.12}
+.shape-3{width:50px;height:50px;top:40px;right:100px;opacity:.06}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;margin-top:4px}
+.section-header h2{font-size:18px;font-weight:700}
+.see-all{color:#22d3ee;text-decoration:none;font-size:13px;font-weight:600}
+.recipe-scroll{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.recipe-scroll::-webkit-scrollbar{display:none}
+.recipe-card{flex-shrink:0;width:180px;background:#f5f5f7;border-radius:20px;overflow:hidden;transition:transform .2s}
+.recipe-card:active{transform:scale(.97)}
+.recipe-img{position:relative;height:120px;overflow:hidden}
+.recipe-img img{width:100%;height:100%;object-fit:cover}
+.recipe-time{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.7);color:#fff;padding:3px 8px;border-radius:10px;font-size:11px;font-weight:500}
+.recipe-body{padding:10px 12px 12px}
+.recipe-body h3{font-size:14px;font-weight:600;margin-bottom:8px}
+.recipe-meta{display:flex;justify-content:space-between;align-items:center}
+.difficulty{font-size:11px;padding:3px 8px;border-radius:10px;font-weight:500}
+.difficulty.easy{background:#22d3ee20;color:#22d3ee}
+.difficulty.medium{background:#f59e0b20;color:#d97706}
+.difficulty.hard{background:#ef444420;color:#dc2626}
+.rating{font-size:12px;font-weight:600;color:#f59e0b}
+.book-list{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.book-list::-webkit-scrollbar{display:none}
+.book-card{flex-shrink:0;width:150px;background:#f5f5f7;border-radius:16px;overflow:hidden;padding:12px;transition:transform .2s}
+.book-card:active{transform:scale(.97)}
+.book-cover{position:relative;height:180px;border-radius:12px;overflow:hidden;margin-bottom:10px}
+.book-cover img{width:100%;height:100%;object-fit:cover}
+.book-badge{position:absolute;top:8px;left:8px;background:#22d3ee;color:#1a1a1a;padding:3px 8px;border-radius:8px;font-size:10px;font-weight:700}
+.book-info h3{font-size:13px;font-weight:600;margin-bottom:2px}
+.book-author{font-size:11px;color:#8e8e93;margin-bottom:10px}
+.book-footer{display:flex;justify-content:space-between;align-items:center}
+.book-price{font-size:12px;font-weight:700;color:#22d3ee}
+.book-btn{background:#1a1a1a;color:#fff;border:none;padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
+.video-list{display:flex;flex-direction:column;gap:14px}
+.video-card{background:#f5f5f7;border-radius:20px;overflow:hidden;transition:transform .2s}
+.video-card:active{transform:scale(.98)}
+.video-thumb{position:relative;height:180px;overflow:hidden}
+.video-thumb img{width:100%;height:100%;object-fit:cover}
+.play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;background:rgba(34,211,238,.9);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.video-duration{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.8);color:#fff;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:500}
+.video-info{padding:14px 16px}
+.video-info h3{font-size:15px;font-weight:600;margin-bottom:4px}
+.video-info p{font-size:12px;color:#8e8e93}
+.page-title{padding:16px 0 20px}
+.page-title h2{font-size:24px;font-weight:800;margin-bottom:6px}
+.page-title p{font-size:14px;color:#8e8e93}
+.filter-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:16px;scrollbar-width:none}
+.filter-tabs::-webkit-scrollbar{display:none}
+.filter-tab{flex-shrink:0;background:#f5f5f7;border:none;padding:8px 16px;border-radius:20px;font-size:13px;font-weight:500;color:#666;cursor:pointer;font-family:inherit;transition:all .2s}
+.filter-tab.active{background:#22d3ee;color:#1a1a1a;font-weight:600}
+.recipe-grid{display:flex;flex-direction:column;gap:14px}
+.recipe-card-large{border-radius:20px;overflow:hidden;transition:transform .2s}
+.recipe-card-large:active{transform:scale(.98)}
+.recipe-img-large{position:relative;height:200px;overflow:hidden}
+.recipe-img-large img{width:100%;height:100%;object-fit:cover}
+.recipe-overlay{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,.8));color:#fff}
+.recipe-tag{display:inline-block;background:#22d3ee;color:#1a1a1a;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:700;margin-bottom:8px}
+.recipe-overlay h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.recipe-stats{display:flex;gap:14px;font-size:12px;color:#ccc}
+.book-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.book-item{background:#f5f5f7;border-radius:16px;padding:12px;transition:transform .2s}
+.book-item:active{transform:scale(.97)}
+.book-cover-lg{position:relative;height:170px;border-radius:12px;overflow:hidden;margin-bottom:10px}
+.book-cover-lg img{width:100%;height:100%;object-fit:cover}
+.book-progress{position:absolute;bottom:0;left:0;right:0;height:4px;background:#e5e5e5}
+.book-progress::after{content:'';position:absolute;left:0;top:0;height:100%;width:var(--progress);background:#22d3ee;border-radius:0 2px 2px 0}
+.book-item h4{font-size:13px;font-weight:600;margin-bottom:2px}
+.book-item p{font-size:11px;color:#8e8e93;margin-bottom:6px}
+.book-status{font-size:10px;padding:2px 8px;border-radius:6px;font-weight:600}
+.book-status.reading{background:#22d3ee20;color:#22d3ee}
+.book-status.new{background:#ef444420;color:#ef4444}
+.book-status.free{background:#22c55e20;color:#16a34a}
+.featured-video{background:#1a1a1a;border-radius:20px;overflow:hidden;margin-bottom:16px}
+.featured-thumb{position:relative;height:200px;overflow:hidden}
+.featured-thumb img{width:100%;height:100%;object-fit:cover}
+.featured-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:64px;background:rgba(34,211,238,.9);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.featured-badge{position:absolute;top:12px;left:12px;background:#22d3ee;color:#1a1a1a;padding:4px 12px;border-radius:10px;font-size:12px;font-weight:700}
+.featured-info{padding:16px}
+.featured-info h3{font-size:16px;font-weight:700;color:#fff;margin-bottom:6px}
+.featured-info p{font-size:12px;color:#aaa}
+.video-list-compact{display:flex;flex-direction:column;gap:12px}
+.video-row{display:flex;gap:12px;background:#f5f5f7;border-radius:16px;padding:10px;transition:transform .2s}
+.video-row:active{transform:scale(.98)}
+.video-row-thumb{position:relative;width:120px;height:80px;border-radius:12px;overflow:hidden;flex-shrink:0}
+.video-row-thumb img{width:100%;height:100%;object-fit:cover}
+.video-row-duration{position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,.8);color:#fff;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:500}
+.video-row-info h4{font-size:14px;font-weight:600;margin-bottom:4px;line-height:1.3}
+.video-row-info p{font-size:12px;color:#8e8e93}
+.add-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.add-card{background:#f5f5f7;border-radius:20px;padding:20px 16px;text-align:center;transition:all .2s;cursor:pointer;border:2px solid transparent}
+.add-card:active{transform:scale(.97);border-color:#22d3ee}
+.add-icon-lg{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.add-card h3{font-size:14px;font-weight:600;margin-bottom:4px}
+.add-card p{font-size:12px;color:#8e8e93}
+.profile-header{display:flex;flex-direction:column;align-items:center;padding:20px 0 24px}
+.profile-avatar-lg{position:relative;width:100px;height:100px;border-radius:50%;overflow:hidden;border:3px solid #22d3ee;margin-bottom:14px}
+.profile-avatar-lg img{width:100%;height:100%;object-fit:cover}
+.edit-avatar{position:absolute;bottom:0;right:0;width:28px;height:28px;background:#22d3ee;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #fff}
+.profile-name{font-size:22px;font-weight:700;margin-bottom:2px}
+.profile-handle{font-size:13px;color:#22d3ee;font-weight:600;margin-bottom:8px}
+.profile-bio{font-size:13px;color:#666;text-align:center;margin-bottom:16px;line-height:1.4}
+.profile-stats-row{display:flex;gap:24px;margin-bottom:16px}
+.p-stat{display:flex;flex-direction:column;align-items:center;gap:2px}
+.p-number{font-size:18px;font-weight:700}
+.p-label{font-size:12px;color:#8e8e93}
+.profile-buttons{display:flex;gap:10px;width:100%}
+.btn-main{flex:1;background:#1a1a1a;color:#fff;border:none;padding:10px 20px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-ghost{width:44px;height:44px;background:#f5f5f7;border:none;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#1a1a1a;cursor:pointer}
+.profile-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:16px;scrollbar-width:none}
+.profile-tabs::-webkit-scrollbar{display:none}
+.p-tab{flex-shrink:0;background:#f5f5f7;border:none;padding:8px 16px;border-radius:20px;font-size:13px;font-weight:500;color:#666;cursor:pointer;font-family:inherit}
+.p-tab.active{background:#22d3ee;color:#1a1a1a;font-weight:600}
+.content-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.content-item{aspect-ratio:1;overflow:hidden;border-radius:4px}
+.content-item img{width:100%;height:100%;object-fit:cover}
+.bottom-nav{display:flex;justify-content:space-around;align-items:center;background:rgba(255,255,255,.98);backdrop-filter:blur(20px);padding:8px 0 20px;border-top:1px solid #f0f0f0;z-index:100;flex-shrink:0;position:relative}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:#8e8e93;cursor:pointer;padding:4px 8px;position:relative;font-family:inherit;transition:color .2s;flex:1}
+.nav-item.active{color:#22d3ee}
+.nav-item span{font-size:10px;font-weight:500}
+.nav-add-btn{padding:0;flex:.8}
+.add-circle{width:52px;height:52px;background:#22d3ee;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;margin-top:-20px;box-shadow:0 4px 15px rgba(34,211,238,.4);transition:transform .2s}
+.add-circle:active{transform:scale(.9)}
+.home-indicator{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:100px;height:4px;background:#ccc;border-radius:2px;z-index:101}
+.toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.85);color:#fff;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:500;z-index:1000;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="phone-frame">
+<div class="status-bar"><span class="time" id="clock">09:41</span><div class="brand">RODEX</div><div class="icons"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg></div></div>
+<div class="app-header"><div class="header-top"><div class="logo"><div class="logo-icon">R</div><h1>RODEX</h1></div><div class="header-actions"><button class="icon-btn" onclick="showToast('3 yeni bildirim')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="badge">3</div></button><div class="avatar"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop&crop=face" alt="Profil"></div></div></div><div class="search-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" placeholder="Tarif, e-kitap, video ara..." onfocus="showToast('Arama aktif')"></div></div>
+<div class="content-area" id="contentArea">
+<div class="page active" id="page-home">
+<div class="categories-row">
+<div class="category-item active" onclick="filterCategory(this)"><div class="cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span>Ana Sayfa</span></div>
+<div class="category-item" onclick="filterCategory(this)"><div class="cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><span>Tarifler</span></div>
+<div class="category-item" onclick="filterCategory(this)"><div class="cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><span>E-Kitap</span></div>
+<div class="category-item" onclick="filterCategory(this)"><div class="cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div><span>Videolar</span></div>
+<div class="category-item" onclick="filterCategory(this)"><div class="cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg></div><span>Blog</span></div>
+</div>
+<div class="hero-banner"><div class="hero-content"><div class="hero-tag">RODEX Özel</div><h2>Bugün Ne Öğrenmek İstersin?</h2><p>Binlerce tarif, e-kitap ve video içerik seni bekliyor</p><button class="hero-btn" onclick="showToast('Keşfet ekranı')">Keşfet</button></div><div class="hero-shapes"><div class="shape shape-1"></div><div class="shape shape-2"></div><div class="shape shape-3"></div></div></div>
+<div class="section-header"><h2>Popüler Tarifler</h2><a href="#" class="see-all" onclick="showToast('Tüm tarifler')">Tümü</a></div>
+<div class="recipe-scroll">
+<div class="recipe-card" onclick="showToast('Ballı Pankek')"><div class="recipe-img"><img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=300&h=200&fit=crop" alt=""><div class="recipe-time">15 dk</div></div><div class="recipe-body"><h3>Ballı Pankek</h3><div class="recipe-meta"><span class="difficulty easy">Kolay</span><span class="rating">4.9</span></div></div></div>
+<div class="recipe-card" onclick="showToast('Ev Yapımı Pizza')"><div class="recipe-img"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=300&h=200&fit=crop" alt=""><div class="recipe-time">45 dk</div></div><div class="recipe-body"><h3>Ev Yapımı Pizza</h3><div class="recipe-meta"><span class="difficulty medium">Orta</span><span class="rating">4.7</span></div></div></div>
+<div class="recipe-card" onclick="showToast('Akdeniz Salatası')"><div class="recipe-img"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=300&h=200&fit=crop" alt=""><div class="recipe-time">10 dk</div></div><div class="recipe-body"><h3>Akdeniz Salatası</h3><div class="recipe-meta"><span class="difficulty easy">Kolay</span><span class="rating">4.8</span></div></div></div>
+</div>
+<div class="section-header"><h2>Yeni E-Kitaplar</h2><a href="#" class="see-all" onclick="showToast('Tüm e-kitaplar')">Tümü</a></div>
+<div class="book-list">
+<div class="book-card" onclick="showToast('Küçük Prens')"><div class="book-cover"><img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=150&h=220&fit=crop" alt=""><div class="book-badge">Yeni</div></div><div class="book-info"><h3>Küçük Prens</h3><p class="book-author">Antoine de Saint</p><div class="book-footer"><span class="book-price">Ücretsiz</span><button class="book-btn">Oku</button></div></div></div>
+<div class="book-card" onclick="showToast('Suç ve Ceza')"><div class="book-cover"><img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=150&h=220&fit=crop" alt=""></div><div class="book-info"><h3>Suç ve Ceza</h3><p class="book-author">Dostoyevski</p><div class="book-footer"><span class="book-price">Ücretsiz</span><button class="book-btn">Oku</button></div></div></div>
+<div class="book-card" onclick="showToast('1984')"><div class="book-cover"><img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=150&h=220&fit=crop" alt=""></div><div class="book-info"><h3>1984</h3><p class="book-author">George Orwell</p><div class="book-footer"><span class="book-price">Ücretsiz</span><button class="book-btn">Oku</button></div></div></div>
+</div>
+<div class="section-header"><h2>Öne Çıkan Videolar</h2><a href="#" class="see-all" onclick="showToast('Tüm videolar')">Tümü</a></div>
+<div class="video-list">
+<div class="video-card" onclick="showToast('Video oynatılıyor')"><div class="video-thumb"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=220&fit=crop" alt=""><div class="play-btn"><svg width="32" height="32" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="video-duration">12:45</div></div><div class="video-info"><h3>En İyi 10 Yemek Tarifi</h3><p>RODEX Mutfak • 15K görüntüleme</p></div></div>
+<div class="video-card" onclick="showToast('Video oynatılıyor')"><div class="video-thumb"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&h=220&fit=crop" alt=""><div class="play-btn"><svg width="32" height="32" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="video-duration">08:30</div></div><div class="video-info"><h3>Doğada Yaşam Rehberi</h3><p>RODEX Doğa • 8.2K görüntüleme</p></div></div>
+</div>
+</div>
+<div class="page" id="page-recipes"><div class="page-title"><h2>Tarifler</h2><p>Binlerce lezzetli tarif seni bekliyor</p></div><div class="filter-tabs"><button class="filter-tab active" onclick="filterTab(this)">Tümü</button><button class="filter-tab" onclick="filterTab(this)">Kahvaltı</button><button class="filter-tab" onclick="filterTab(this)">Ana Yemek</button><button class="filter-tab" onclick="filterTab(this)">Tatlı</button><button class="filter-tab" onclick="filterTab(this)">Salata</button></div><div class="recipe-grid"><div class="recipe-card-large" onclick="showToast('Ballı Pankek')"><div class="recipe-img-large"><img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=250&fit=crop" alt=""><div class="recipe-overlay"><span class="recipe-tag">Kahvaltı</span><h3>Ballı Pankek</h3><div class="recipe-stats"><span>15 dk</span><span>4.9</span><span>2.3K</span></div></div></div></div><div class="recipe-card-large" onclick="showToast('Ev Yapımı Pizza')"><div class="recipe-img-large"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=250&fit=crop" alt=""><div class="recipe-overlay"><span class="recipe-tag">Ana Yemek</span><h3>Ev Yapımı Pizza</h3><div class="recipe-stats"><span>45 dk</span><span>4.7</span><span>5.1K</span></div></div></div></div><div class="recipe-card-large" onclick="showToast('Çikolatalı Pasta')"><div class="recipe-img-large"><img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=250&fit=crop" alt=""><div class="recipe-overlay"><span class="recipe-tag">Tatlı</span><h3>Çikolatalı Pasta</h3><div class="recipe-stats"><span>60 dk</span><span>4.8</span><span>3.7K</span></div></div></div></div><div class="recipe-card-large" onclick="showToast('Akdeniz Salatası')"><div class="recipe-img-large"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=250&fit=crop" alt=""><div class="recipe-overlay"><span class="recipe-tag">Salata</span><h3>Akdeniz Salatası</h3><div class="recipe-stats"><span>10 dk</span><span>4.8</span><span>1.9K</span></div></div></div></div></div></div>
+<div class="page" id="page-books"><div class="page-title"><h2>E-Kitap Kütüphanesi</h2><p>Binlerce kitap, tek tıkla oku</p></div><div class="filter-tabs"><button class="filter-tab active" onclick="filterTab(this)">Tümü</button><button class="filter-tab" onclick="filterTab(this)">Roman</button><button class="filter-tab" onclick="filterTab(this)">Bilim</button><button class="filter-tab" onclick="filterTab(this)">Tarih</button><button class="filter-tab" onclick="filterTab(this)">Kişisel Gelişim</button></div><div class="book-grid"><div class="book-item" onclick="showToast('Küçük Prens')"><div class="book-cover-lg"><img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=150&h=220&fit=crop" alt=""><div class="book-progress" style="--progress:75%"></div></div><h4>Küçük Prens</h4><p>Antoine de Saint</p><span class="book-status reading">%75 Okundu</span></div><div class="book-item" onclick="showToast('Suç ve Ceza')"><div class="book-cover-lg"><img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=150&h=220&fit=crop" alt=""></div><h4>Suç ve Ceza</h4><p>Dostoyevski</p><span class="book-status new">Yeni</span></div><div class="book-item" onclick="showToast('1984')"><div class="book-cover-lg"><img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=150&h=220&fit=crop" alt=""></div><h4>1984</h4><p>George Orwell</p><span class="book-status free">Ücretsiz</span></div><div class="book-item" onclick="showToast('Fahrenheit 451')"><div class="book-cover-lg"><img src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=150&h=220&fit=crop" alt=""></div><h4>Fahrenheit 451</h4><p>Ray Bradbury</p><span class="book-status free">Ücretsiz</span></div><div class="book-item" onclick="showToast('Harry Potter')"><div class="book-cover-lg"><img src="https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=150&h=220&fit=crop" alt=""></div><h4>Harry Potter</h4><p>J.K. Rowling</p><span class="book-status new">Yeni</span></div><div class="book-item" onclick="showToast('Simyacı')"><div class="book-cover-lg"><img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=150&h=220&fit=crop" alt=""></div><h4>Simyacı</h4><p>Paulo Coelho</p><span class="book-status free">Ücretsiz</span></div></div></div>
+<div class="page" id="page-videos"><div class="page-title"><h2>Video İçerikler</h2><p>Tarif videoları, belgeseller ve daha fazlası</p></div><div class="featured-video" onclick="showToast('Trend video')"><div class="featured-thumb"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=220&fit=crop" alt=""><div class="featured-play"><svg width="48" height="48" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="featured-badge">Trend</div></div><div class="featured-info"><h3>En İyi 10 Yemek Tarifi - 2026</h3><p>RODEX Mutfak • 15K görüntüleme • 2 gün önce</p></div></div><div class="video-list-compact"><div class="video-row" onclick="showToast('Video oynatılıyor')"><div class="video-row-thumb"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=200&h=120&fit=crop" alt=""><span class="video-row-duration">08:30</span></div><div class="video-row-info"><h4>Doğada Yaşam Rehberi</h4><p>RODEX Doğa • 8.2K görüntüleme</p></div></div><div class="video-row" onclick="showToast('Video oynatılıyor')"><div class="video-row-thumb"><img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=200&h=120&fit=crop" alt=""><span class="video-row-duration">15:20</span></div><div class="video-row-info"><h4>Doğa Yürüyüşü İpuçları</h4><p>RODEX Doğa • 5.1K görüntüleme</p></div></div><div class="video-row" onclick="showToast('Video oynatılıyor')"><div class="video-row-thumb"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=120&fit=crop" alt=""><span class="video-row-duration">22:10</span></div><div class="video-row-info"><h4>Dağcılık Temel Eğitimi</h4><p>RODEX Spor • 3.8K görüntüleme</p></div></div></div></div>
+<div class="page" id="page-add"><div class="page-title"><h2>İçerik Ekle</h2><p>RODEX'e yeni içerik paylaş</p></div><div class="add-grid"><div class="add-card" onclick="showToast('Fotoğraf')"><div class="add-icon-lg" style="background:#22d3ee20;color:#22d3ee"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><h3>Fotoğraf Paylaş</h3><p>Galerinden fotoğraf seç ve paylaş</p></div><div class="add-card" onclick="showToast('Video')"><div class="add-icon-lg" style="background:#22d3ee20;color:#22d3ee"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div><h3>Video Yükle</h3><p>Videonu yükle ve yayınla</p></div><div class="add-card" onclick="showToast('Tarif')"><div class="add-icon-lg" style="background:#22d3ee20;color:#22d3ee"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><h3>Tarif Ekle</h3><p>Yeni bir yemek tarifi oluştur</p></div><div class="add-card" onclick="showToast('E-Kitap')"><div class="add-icon-lg" style="background:#22d3ee20;color:#22d3ee"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><h3>E-Kitap Yükle</h3><p>PDF veya EPUB formatında kitap yükle</p></div><div class="add-card" onclick="showToast('Blog')"><div class="add-icon-lg" style="background:#22d3ee20;color:#22d3ee"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><h3>Blog Yazısı</h3><p>Yeni bir blog yazısı yaz</p></div><div class="add-card" onclick="showToast('Hikaye')"><div class="add-icon-lg" style="background:#22d3ee20;color:#22d3ee"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Hikaye Oluştur</h3><p>24 saatlik hikaye paylaş</p></div></div></div>
+<div class="page" id="page-profile"><div class="profile-header"><div class="profile-avatar-lg"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face" alt=""><div class="edit-avatar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div></div><h2 class="profile-name">Ahmet Yılmaz</h2><p class="profile-handle">@ahmetyilmaz</p><p class="profile-bio">Yemek tutkunu | Kitap kurdu | Video içerik üreticisi</p><div class="profile-stats-row"><div class="p-stat"><span class="p-number">42</span><span class="p-label">Tarif</span></div><div class="p-stat"><span class="p-number">18</span><span class="p-label">E-Kitap</span></div><div class="p-stat"><span class="p-number">156</span><span class="p-label">Video</span></div><div class="p-stat"><span class="p-number">12.5K</span><span class="p-label">Takipçi</span></div></div><div class="profile-buttons"><button class="btn-main" onclick="showToast('Profil düzenleme')">Profili Düzenle</button><button class="btn-ghost" onclick="showToast('Ayarlar')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div></div><div class="profile-tabs"><button class="p-tab active" onclick="profileTab(this)">Tariflerim</button><button class="p-tab" onclick="profileTab(this)">E-Kitaplarım</button><button class="p-tab" onclick="profileTab(this)">Videolarım</button></div><div class="profile-content"><div class="content-grid"><div class="content-item"><img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=200&h=200&fit=crop" alt=""></div><div class="content-item"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop" alt=""></div><div class="content-item"><img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=200&h=200&fit=crop" alt=""></div><div class="content-item"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=200&h=200&fit=crop" alt=""></div><div class="content-item"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200&h=200&fit=crop" alt=""></div><div class="content-item"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=200&h=200&fit=crop" alt=""></div></div></div></div>
+</div>
+<div class="bottom-nav">
+<button class="nav-item active" data-page="page-home" onclick="navigate(this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Ana Sayfa</span></button>
+<button class="nav-item" data-page="page-recipes" onclick="navigate(this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span>Tarifler</span></button>
+<button class="nav-item nav-add-btn" data-page="page-add" onclick="navigate(this)"><div class="add-circle"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
+<button class="nav-item" data-page="page-books" onclick="navigate(this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>E-Kitap</span></button>
+<button class="nav-item" data-page="page-profile" onclick="navigate(this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profil</span></button>
+</div>
+<div class="home-indicator"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function navigate(btn){var target=btn.getAttribute('data-page');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(target).classList.add('active');document.getElementById('contentArea').scrollTop=0}
+function filterCategory(el){document.querySelectorAll('.category-item').forEach(c=>c.classList.remove('active'));el.classList.add('active')}
+function filterTab(el){var parent=el.parentElement;parent.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active')}
+function profileTab(el){var parent=el.parentElement;parent.querySelectorAll('.p-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active')}
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},1500)}
+function updateClock(){var now=new Date();var h=now.getHours().toString().padStart(2,'0');var m=now.getMinutes().toString().padStart(2,'0');document.getElementById('clock').textContent=h+':'+m}updateClock();setInterval(updateClock,60000)
+</script>
+</body>
+</html>
